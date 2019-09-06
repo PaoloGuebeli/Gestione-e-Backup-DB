@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+
+        html, body{
+            margin: 0;
+            height: 100vh;
+            padding: 0;
+            background-color: #7df;
+        }
+
+        .row{
+            width: 100%;
+        }
+
+        div{
+            display: inline-block;
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        .col-1{
+            width: 8%;
+        }
+
+        .col-2{
+            width: 16%;
+        }
+
+        .col-3{
+            width: calc(25% - 2px);
+        }
+
+        .col-4{
+            width: 33%;
+        }
+
+        .col-5{
+            width: 41%;
+        }
+
+        .col-6{
+            width: 49%;
+        }
+
+        .col-7{
+            width: 58%;
+        }
+
+        .col-8{
+            width: 66%;
+        }
+
+        .col-9{
+            width: calc(75% - 2px);
+        }
+
+        .col-10{
+            width: 83%;
+        }
+
+        .col-11{
+            width: 91%;
+        }
+
+        .col-12{
+            width: 100%;
+        }
+
+        .spacing-top-sm{
+            margin-top: 2%;
+        }
+
+        .spacing-top-md{
+            margin-top: 4%;
+        }
+
+        .spacing-top-lg{
+            margin-top: 8%;
+        }
+
+        .spacing-top-xl{
+            margin-top: 16%;
+        }
+
+        .gray{
+            background-color: #ccc;
+        }
+
+        .side{
+            height: 100vh;
+            right: 0;
+            background-color: #fff;
+            border-left: 5px solid #6ce;
+        }
+
+        form {
+            margin: 20px;
+        }
+
+        .title{
+            text-align: center;
+            font-family: "Trebuchet MS";
+        }
+
+        input[type="text"], input[type="password"]{
+            background-color: #eee;
+            padding: 8px;
+            border-radius: 8px;
+            border: 2px solid lightgray;
+        }
+
+        input:active{
+            border-color: #eee;
+        }
+
+        input{
+            outline: none;
+        }
+
+        input[type="submit"] {
+            padding: 10px;
+            background-color: #6cc7e6;
+            border: none;
+            border-radius: 10px;
+            color: white;
+        }
+
+        input[type="submit"]:hover {
+            box-shadow: 0px 0px 3px 3px rgba(0,0,0,0.1);
+        }
+
+        @media screen {
+
+        }
+    </style>
+</head>
+<body>
+    <div class="row">
+        <div class="col-9"></div>
+        <div class="col-3">
+            <div class="side" style="width: calc(100% - 5px);">
+                <h2 class="title spacing-top-xl">
+                    CPT BACKUP MANAGER
+                </h2>
+                <div class="row">
+                    <center>
+                        <form>
+                            <input class="col-8" type="text" placeholder="E-mail">
+                            <input class="col-8 spacing-top-sm" type="password" placeholder="Password">
+                            <div class="row spacing-top-md">
+                                <input class="col-4" type="submit" value="LOGIN">
+                            </div>
+                        </form>
+                    </center>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
