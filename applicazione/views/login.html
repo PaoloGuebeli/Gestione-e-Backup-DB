@@ -1,122 +1,151 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <script src="../libraries/jquery-3.4.1.min.js"></script>
     <style>
 
-        html, body{
+        html, body {
             margin: 0;
             height: 100vh;
             padding: 0;
             background-color: #7df;
+            font-family: "Trebuchet MS";
         }
 
-        .row{
+        .row {
             width: 100%;
         }
 
-        div{
+        div {
             display: inline-block;
             margin: 0;
             padding: 0;
             border: 0;
         }
 
-        .col-1{
+        .col-1 {
             width: 8%;
         }
 
-        .col-2{
+        .col-2 {
             width: 16%;
         }
 
-        .col-3{
+        .col-3 {
             width: calc(25% - 2px);
         }
 
-        .col-4{
+        .col-4 {
             width: 33%;
         }
 
-        .col-5{
+        .col-5 {
             width: 41%;
         }
 
-        .col-6{
+        .col-6 {
             width: 49%;
         }
 
-        .col-7{
+        .col-7 {
             width: 58%;
         }
 
-        .col-8{
+        .col-8 {
             width: 66%;
         }
 
-        .col-9{
+        .col-9 {
             width: calc(75% - 2px);
         }
 
-        .col-10{
+        .col-10 {
             width: 83%;
         }
 
-        .col-11{
+        .col-11 {
             width: 91%;
         }
 
-        .col-12{
+        .col-12 {
             width: 100%;
         }
 
-        .spacing-top-sm{
+        .spacing-top-sm {
             margin-top: 2%;
         }
 
-        .spacing-top-md{
+        .spacing-top-md {
             margin-top: 4%;
         }
 
-        .spacing-top-lg{
+        .spacing-top-lg {
             margin-top: 8%;
         }
 
-        .spacing-top-xl{
+        .spacing-top-xl {
             margin-top: 16%;
         }
 
-        .gray{
+        .spacing-left-sm {
+            margin-left: 2%;
+        }
+
+        .spacing-left-md {
+            margin-left: 4%;
+        }
+
+        .spacing-left-lg {
+            margin-left: 8%;
+        }
+
+        .spacing-left-xl {
+            margin-left: 16%;
+        }
+
+        .gray {
             background-color: #ccc;
         }
 
-        .side{
+        .side {
             height: 100vh;
-            right: 0;
             background-color: #fff;
-            border-left: 5px solid #6ce;
+            border-right: 5px solid #6ce;
+            width: 25%;
         }
 
         form {
             margin: 20px;
         }
 
-        .title{
-            text-align: center;
-            font-family: "Trebuchet MS";
+        .title {
+            text-align: left;
         }
 
-        input[type="text"], input[type="password"]{
+        .cover {
+            background-color: rgba(0, 0, 0, 0.3);
+            position: fixed;
+            z-index: 10000;
+            width: 100vw;
+            height: 100vh;
+            top: 0;
+            left: 0;
+        }
+
+        input[type="text"], input[type="password"] {
             background-color: #eee;
             padding: 8px;
             border-radius: 8px;
             border: 2px solid lightgray;
+            width: 100%;
         }
 
-        input:active{
+        input:active {
             border-color: #eee;
         }
 
-        input{
+        input {
             outline: none;
         }
 
@@ -129,35 +158,155 @@
         }
 
         input[type="submit"]:hover {
-            box-shadow: 0px 0px 3px 3px rgba(0,0,0,0.1);
+            box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.1);
         }
 
-        @media screen {
+        .linked {
+            color: dodgerblue;
+            text-decoration: underline;
+            cursor: pointer;
+        }
 
+        .linked:active {
+            color: gray;
+        }
+
+        #creationTab {
+            display: none;
+        }
+
+        .creationForm {
+            background-color: #fff;
+            border: solid 2px gray;
+            border-radius: 10px;
+            top: 20vh;
+            left: 37.5vw;
+            width: 25vw;
+            height: 60vh;
+            position: fixed;
+            margin: 0;
+        }
+
+
+        #closeButton{
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: calc(100vw - 50px);
+            width: 20px;
+            height: 20px;
+            border: 1px solid black;
+            background-color: rgba(200,10,10,0.6);
+            color: white;
+            z-index: 10001;
+            padding-left: 11px;
+            cursor: pointer;
+        }
+
+        #closeButton:hover{
+            background-color: rgb(200,10,10);
+        }
+
+        @media only screen and (max-width: 1400px) {
+            .side {
+                width: 50%;
+            }
+
+            .creationForm {
+                top: 10vh;
+                left: 20vw;
+                width: 60vw;
+                height: 80vh;
+            }
+        }
+
+        @media only screen and (max-width: 600px) {
+            .side {
+                width: 100%;
+                border: none;
+            }
+
+            .creationForm {
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                border: none;
+                border-radius: 0;
+                background-color: rgba(255,255,255,0.7);
+            }
         }
     </style>
 </head>
 <body>
-    <div class="row">
-        <div class="col-9"></div>
-        <div class="col-3">
-            <div class="side" style="width: calc(100% - 5px);">
-                <h2 class="title spacing-top-xl">
-                    CPT BACKUP MANAGER
-                </h2>
-                <div class="row">
-                    <center>
-                        <form>
-                            <input class="col-8" type="text" placeholder="E-mail">
-                            <input class="col-8 spacing-top-sm" type="password" placeholder="Password">
-                            <div class="row spacing-top-md">
-                                <input class="col-4" type="submit" value="LOGIN">
-                            </div>
-                        </form>
-                    </center>
-                </div>
+<div class="cover" id="creationTab">
+    <div id="closeButton"> X </div>
+    <form class="creationForm" id="creationForm">
+        <div class="row spacing-top-lg spacing-left-xl col-8">
+            <h2 class="title" style="text-align: left">RICHIEDI ACCOUNT</h2>
+            <input class="spacing-top-sm" type="text" placeholder="Nome">
+            <input class="spacing-top-sm" type="text" placeholder="Cognome">
+            <input class="spacing-top-sm" type="text" placeholder="E-mail">
+            <input class="spacing-top-sm" type="password" placeholder="Password">
+            <div class="row spacing-top-md">
+                <input class="col-4" type="submit" value="RICHIEDI">
             </div>
         </div>
+    </form>
+</div>
+<div class="row" id="container">
+    <div class="side" id="login">
+        <div class="row">
+            <center>
+                <form>
+                    <div class="col-8 spacing-top-xl">
+                        <h2 class="title">
+                            CPT BACKUP MANAGER
+                        </h2>
+                        <input type="text" placeholder="E-mail">
+                        <input class="spacing-top-sm" type="password" placeholder="Password">
+                        <div class="linked spacing-top-sm" id="passReset">Hai dimenticato la password?</div>
+                        <div class="row spacing-top-md">
+                            <input class="col-4" type="submit" value="LOGIN">
+                        </div>
+                        <div class="linked spacing-top-md" id="new">Richiedere account</div>
+                    </div>
+                </form>
+            </center>
+        </div>
     </div>
+</div>
 </body>
+<script>
+
+    /*$(window).resize(function () {
+        if ($(window).width() > 1200) {
+            $('#main').removeClass('col-12').removeClass('col-6').addClass('col-9');
+            $('#login').removeClass('col-0').removeClass('col-6').addClass('col-3');
+        } else if ($(window).width() < 1200 && $(window).width() > 600) {
+            $('#main').removeClass('col-9').removeClass('col-0').addClass('col-6');
+            $('#login').removeClass('col-3').removeClass('col-12').addClass('col-6');
+        } else if ($(window).width() < 600) {
+            $('#main').removeClass('col-9').removeClass('col-6').addClass('col-0');
+            $('#login').removeClass('col-3').removeClass('col-6').addClass('col-12');
+        }
+    })*/
+
+    $('#new').click(function () {
+        $('#creationTab').css('display', 'block');
+        $('#closeButton').show();
+    });
+
+    $(document).mouseup(function(e)
+    {
+        var container = $('#creationTab');
+
+        // if the target of the click isn't the container nor a descendant of the container
+        if (!$('#creationForm').is(e.target) && $('#creationForm').has(e.target).length === 0)
+        {
+            container.hide();
+        }
+    });
+
+</script>
 </html>
