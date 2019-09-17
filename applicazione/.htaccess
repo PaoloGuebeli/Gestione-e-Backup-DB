@@ -1,0 +1,16 @@
+# se ci sono directories che si chiamano come i files va comunque ad
+#applicare le regole
+Options -MultiViews
+# attiva il modulo apache RewriteEngine
+RewriteEngine On
+# Disallows others to look directly into /public/ folder
+Options -Indexes
+RewriteBase /applicazione/
+# regole di rewrite generali, se le 3 sotto sono valide allora riscrivi il link (fai partire RewriteCond)
+#non eseguirla per una directory
+RewriteCond %{REQUEST_FILENAME} !-d
+#non eseguirla per regolare file che esiste
+RewriteCond %{REQUEST_FILENAME} !-f
+#non eseguirla per un link
+RewriteCond %{REQUEST_FILENAME} !-l
+RewriteRule ^(.+)$ index.php?url=$1 [QSA,L]
