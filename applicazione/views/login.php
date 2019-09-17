@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <title>CPT backup manager - Login</title>
     <script src="../libraries/jquery-3.4.1.min.js"></script>
     <style>
 
@@ -158,13 +159,17 @@
         }
 
         input[type="submit"]:hover {
-            box-shadow: 0px 0px 3px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0px 0px 10px 3px rgba(0, 0, 0, 0.1);
         }
 
         .linked {
             color: dodgerblue;
             text-decoration: underline;
             cursor: pointer;
+        }
+
+        .linked:hover{
+            color: #0870da;
         }
 
         .linked:active {
@@ -205,6 +210,11 @@
 
         #closeButton:hover{
             background-color: rgb(200,10,10);
+        }
+        
+        .error{
+            color: #a00;
+            font-weight: bold;
         }
 
         @media only screen and (max-width: 1400px) {
@@ -258,17 +268,18 @@
     <div class="side" id="login">
         <div class="row">
             <center>
-                <form>
+                <form action="<?php echo URL?>login/verify" method="post">
                     <div class="col-8 spacing-top-xl">
                         <h2 class="title">
                             CPT BACKUP MANAGER
                         </h2>
-                        <input type="text" placeholder="E-mail">
-                        <input class="spacing-top-sm" type="password" placeholder="Password">
+                        <input type="text" placeholder="E-mail" name="email">
+                        <input class="spacing-top-sm" type="password" placeholder="Password" name="pass">
                         <div class="linked spacing-top-sm" id="passReset">Hai dimenticato la password?</div>
                         <div class="row spacing-top-md">
                             <input class="col-4" type="submit" value="LOGIN">
                         </div>
+                        <?php if(isset($_POST['error'])): ?><span class="error"><?php echo $_POST['error'] ?></span><?php endif; ?>
                         <div class="linked spacing-top-md" id="new">Richiedere account</div>
                     </div>
                 </form>
