@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>CPT backup manager - Login</title>
-    <script src="../libraries/jquery-3.4.1.min.js"></script>
+    <script src="<?php echo URL?>/libraries/jquery-3.4.1.min.js"></script>
     <style>
 
         html, body {
@@ -177,7 +177,7 @@
         }
 
         #creationTab {
-            display: none;
+            <?php if(!isset($_POST['creationError'])): ?>display: none;<?php endif; ?>
         }
 
         .creationForm {
@@ -251,16 +251,17 @@
 <body>
 <div class="cover" id="creationTab">
     <div id="closeButton"> X </div>
-    <form class="creationForm" id="creationForm">
+    <form method="post" action="<?php echo URL?>users/addUser" class="creationForm" id="creationForm">
         <div class="row spacing-top-lg spacing-left-xl col-8">
             <h2 class="title" style="text-align: left">RICHIEDI ACCOUNT</h2>
-            <input class="spacing-top-sm" type="text" placeholder="Nome">
-            <input class="spacing-top-sm" type="text" placeholder="Cognome">
-            <input class="spacing-top-sm" type="text" placeholder="E-mail">
-            <input class="spacing-top-sm" type="password" placeholder="Password">
+            <input class="spacing-top-sm" type="text" placeholder="Nome" name="name">
+            <input class="spacing-top-sm" type="text" placeholder="Cognome" name="lastname">
+            <input class="spacing-top-sm" type="text" placeholder="E-mail" name="email">
+            <input class="spacing-top-sm" type="password" placeholder="Password" name="password">
             <div class="row spacing-top-md">
                 <input class="col-4" type="submit" value="RICHIEDI">
             </div>
+            <?php if(isset($_POST['creationError'])): ?><p class="error"><?php echo $_POST['creationError'] ?></p><?php endif; ?>
         </div>
     </form>
 </div>
@@ -275,11 +276,11 @@
                         </h2>
                         <input type="text" placeholder="E-mail" name="email">
                         <input class="spacing-top-sm" type="password" placeholder="Password" name="pass">
+                        <?php if(isset($_POST['error'])): ?><p class="error"><?php echo $_POST['error'] ?></p><?php endif; ?>
                         <div class="linked spacing-top-sm" id="passReset">Hai dimenticato la password?</div>
                         <div class="row spacing-top-md">
                             <input class="col-4" type="submit" value="LOGIN">
                         </div>
-                        <?php if(isset($_POST['error'])): ?><span class="error"><?php echo $_POST['error'] ?></span><?php endif; ?>
                         <div class="linked spacing-top-md" id="new">Richiedere account</div>
                     </div>
                 </form>
@@ -289,19 +290,6 @@
 </div>
 </body>
 <script>
-
-    /*$(window).resize(function () {
-        if ($(window).width() > 1200) {
-            $('#main').removeClass('col-12').removeClass('col-6').addClass('col-9');
-            $('#login').removeClass('col-0').removeClass('col-6').addClass('col-3');
-        } else if ($(window).width() < 1200 && $(window).width() > 600) {
-            $('#main').removeClass('col-9').removeClass('col-0').addClass('col-6');
-            $('#login').removeClass('col-3').removeClass('col-12').addClass('col-6');
-        } else if ($(window).width() < 600) {
-            $('#main').removeClass('col-9').removeClass('col-6').addClass('col-0');
-            $('#login').removeClass('col-3').removeClass('col-6').addClass('col-12');
-        }
-    })*/
 
     $('#new').click(function () {
         $('#creationTab').css('display', 'block');
@@ -313,7 +301,7 @@
         var container = $('#creationTab');
 
         // if the target of the click isn't the container nor a descendant of the container
-        if (!$('#creationForm').is(e.target) && $('#creationForm').has(e.target).length === 0)
+        if (!$('#creationForm').is(e.target) && $('#creationForm').has(e.target).length === 0 && !$('#new').is(e.target))
         {
             container.hide();
         }
