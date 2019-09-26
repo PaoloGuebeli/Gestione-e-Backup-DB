@@ -1,8 +1,19 @@
 <?php
     require_once ('controllers/login.php');
     $login = new login();
-    if(!$login->check()){
-        require ("login.php");
+    if(!isset($first)){
+        $first = false;
+    }
+    $invalid = true;
+    if($first){
+        $invalid = false;
+    }else{
+        if($login->check()){
+            $invalid = false;
+        }
+    }
+    if($invalid){
+        $login->index();
     }else{
 ?>
 <!DOCTYPE html>
@@ -10,8 +21,8 @@
 <head>
     <meta charset="UTF-8">
     <title>CPT backup manager - Home</title>
-    <link type="text/css" href="../libraries/fontawesome-free-5.10.2-web/css/all.css" rel="stylesheet">
-    <script src="../libraries/jquery-3.4.1.min.js"></script>
+    <link type="text/css" href="<?php echo URL?>/libraries/fontawesome-free-5.10.2-web/css/all.css" rel="stylesheet">
+    <script src="<?php echo URL?>/libraries/jquery-3.4.1.min.js"></script>
     <style>
         html, body {
             margin: 0;
@@ -172,7 +183,7 @@
 
         .dashboard table{
             border-radius: 2px;
-            min-width: 40vw;
+            width: 80vw;
         }
         
         .dashboard tr:hover{
@@ -180,13 +191,12 @@
         }
 
         .dashboard tr:nth-child(even){
-            min-width: 10vw;
             background-color: #eee;
         }
 
         .dashboard td{
             text-align: center;
-            min-width: 10vw;
+            width: 20vw;
             cursor: pointer;
         }
 
@@ -247,35 +257,54 @@
             margin-right: 1px !important;
         }
 
+        <?php if(isset($alerts)) { ?>
+        .fa-bell{
+            color: rgba(255,0,0,0.8);
+        }
+        <?php } ?>
+
+        a{
+            color: black;
+            text-decoration: none;
+        }
+
     </style>
 </head>
 <body>
+<?php if(isset($alerts)) { ?>
 <div id="war">
     <h3 class="ta-center">Notifiche</h3>
     <div class="spacing-bottom-sm">
         <ul>
-            <li>
-                Backup Sito CPT fallito!
-            </li>
-            <li>
-                Paolo Guebeli richiede un account
-            </li>
+            <?php
+                foreach ($alerts as $alert) {
+                    if ($alert['level'] == 2) {
+                        if ($login->admin()) {
+                            echo "<a href='".URL."users/home'><li>".$alert['content']."</li></a>";
+                        }
+                    } else {
+                        echo
+                        "<a href='".URL."backup/home'><li>".$alert['content']."</li></a>";
+                     }
+                }
+            ?>
         </ul>
     </div>
 </div>
+<?php }?>
 <div class="row navbar">
     <div class="bar">
         <ul>
             <li><a class="active"><span>Home</span></a></li>
-            <li><a href="<?php echo URL.'views/backup.html' ?>"><span>Backups</span></a></li>
-            <?php if($login->admin()): ?><li><a href="<?php echo URL.'views/users.html' ?>"><span>Utenti</span></a></li><?php endif; ?>
+            <li><a href="<?php echo URL?>backup/home"><span>Backups</span></a></li>
+            <?php if($login->admin()): ?><li><a href="<?php echo URL?>users/home"><span>Utenti</span></a></li><?php endif; ?>
         </ul>
     </div>
     <div class="profile">
         <ul>
             <li><a><span><i class="fas fa-user"></i></span></a></li>
             <li><a id="bell"><span><i class="fas fa-bell"></i></span></a></li>
-            <li><a href="login.php"><span><i class="fas fa-sign-out-alt"></i></span></a></li>
+            <li><a href="<?php echo URL.'login/logout' ?>"><span><i class="fas fa-sign-out-alt"></i></span></a></li>
         </ul>
     </div>
 </div>
