@@ -1,77 +1,160 @@
 <?php
 
-require_once ('models/db_manager.php');
+require_once('models/db_manager.php');
+require_once('models/validate.php');
 
-class users{
+/**
+ * Controllo se l'utente può accedere
+ */
+if(validate::check()) {
 
-    public function home(){
-        $users = $this->getUsers();
-        $alerts = db_manager::getAlerts();
-        require ('views/users.php');
-    }
+    class users
+    {
 
-    private function getUsers(){
-        return db_manager::executeQuery('SELECT * from users');
-    }
+        /**
+         * Questo metodo richiama la pagina degli utenti
+         */
+        public function home()
+        {
+            $users = $this->getUsers();
+            $alerts = db_manager::getAlerts();
+            require('views/users.php');
+        }
 
-    public function addUser(){
-        if(isset($_POST['name']) && isset($_POST['lastname']) && isset($_POST['email']) && isset($_POST['password'])) {
-            if(db_manager::executeQuery("SELECT * from users where email ='".$_POST['email']."'") == NULL){
-                $hash = password_hash($_POST['password'], PASSWORD_DEFAULT)."\n";
+        /**
+         * Questo metdo ritorna l'array di tutti gli utenti
+         * @return array|null Ritorna gli utenti se ce ne sono
+         */
+        private function getUsers()
+        {
+            /**
+             * Ritorno tutti gli utenti
+             */
+            return db_manager::executeQuery('SELECT * from users');
+        }
+
+        /**
+         * Questo metodo permette di verificare un account quindi renderlo attivo.
+         * @param $id L'id del utente da verificare
+         */
+        public function verify($id)
+        {
+
+            /**
+             * Controllo l'id prima di verificare l'account
+             */
+            if (validate::checkInt($id)) {
+
+                /**
+                 * Cambio il livello di accesso del utente da 0 (disattivato) a 1 (responsabile).
+                 */
                 db_manager::execute(
-                    "INSERT into users (name,lastname,email,pass,access) values ('".$_POST['name']."','".$_POST['lastname']."','".$_POST['email']."','".$hash."',0)"
-                    );
-                $user = db_manager::executeQuery("SELECT * from users where email ='".$_POST['email']."'");
-                db_manager::execute(
-                    "INSERT into alerts (content,level,user_id) values ('".$_POST['name']." ".$_POST['lastname']." richiede un account','2','".$user[0]['id']."')"
+                    "UPDATE users set access = 1 where id = " . $id
                 );
-                $_POST['creationError'] = 'L\'account è stato creato, verrà verificato nei prossimi giorni';
-                require('views/login.php');
-            }else{
-                $_POST['creationError'] = 'Esiste già un account con questa email';
-                require('views/login.php');
+
+                /**
+                 * Elimino la notifica di verifica del utente.
+                 */
+                db_manager::execute(
+                    "DELETE from alerts where user_id = " . $id
+                );
+
             }
-        }
-    }
 
-    public function verify($id){
-        db_manager::execute(
-            "UPDATE users set access = 1 where id = ".$id
-        );
-        db_manager::execute(
-            "DELETE from alerts where user_id = ".$id
-        );
-        $this->home();
-    }
+            /**
+             * Ritorno alla pagina degli utenti
+             */
+            $this->home();
+        }
 
-    public function modify($id){
-        if($_POST['mName'] != NULL){
-            db_manager::execute(
-                "UPDATE users set name = '".$_POST['mName']."' where id = ".$id
-            );
-        }
-        if($_POST['mLastname'] != NULL){
-            db_manager::execute(
-                "UPDATE users set lastname = '".$_POST['mLastname']."' where id = ".$id
-            );
-        }
-        if($_POST['mEmail'] != NULL){
-            db_manager::execute(
-                "UPDATE users set email = '".$_POST['mEmail']."' where id = ".$id
-            );
-        }
-        if($_POST['mAccess'] != NULL){
-            db_manager::execute(
-                "UPDATE users set access = ".$_POST['mAccess']." where id = ".$id
-            );
-        }
-        $this->home();
-    }
+        /**
+         * Questo metodo permette di modificare un utente.
+         * @param $id L'id del utente da modificare
+         */
+        public function modify($id)
+        {
 
-    public function delete($id){
-        db_manager::execute(
-            "DELETE from users where id = ".$id
-        );
-        $this->home();
+            /**
+             * Controllo l'id prima di modificare l'account
+             */
+            if (validate::checkInt($id)) {
+                /**
+                 * Metto in sicurezza il nome prima di inserirlo nella query
+                 */
+                $name = validate::secureString($_POST['mName']);
+                if ($name != NULL) {
+                    db_manager::execute(
+                        "UPDATE users set name = '" . $name . "' where id = " . $id
+                    );
+                }
+
+                /**
+                 * Metto in sicurezza il cognome prima di inserirlo nella query
+                 */
+                $lastname = validate::secureString($_POST['mLastname']);
+                if ($lastname != NULL) {
+                    db_manager::execute(
+                        "UPDATE users set lastname = '" . $lastname . "' where id = " . $id
+                    );
+                }
+
+                /**
+                 * Controllo l'email prima di inserirla nella query
+                 */
+                if ($_POST['mEmail'] != NULL && validate::checkEmail($_POST['mEmail'])) {
+                    db_manager::execute(
+                        "UPDATE users set email = '" . $_POST['mEmail'] . "' where id = " . $id
+                    );
+                }
+
+                /**
+                 * Controllo il livello di accesso prima di inserirlo nella query
+                 */
+                if ($_POST['mAccess'] != NULL && validate::checkInt($_POST['mAccess'])) {
+                    db_manager::execute(
+                        "UPDATE users set access = " . $_POST['mAccess'] . " where id = " . $id
+                    );
+                }
+
+            }
+
+            /**
+             * Ritorno alla pagina degli utenti
+             */
+            $this->home();
+        }
+
+        /**
+         * Questo metodo permette di eliminare un utente.
+         * @param $id
+         */
+        public function delete($id)
+        {
+
+            /**
+             * Controllo l'id prima di eliminare l'account
+             */
+            if (validate::checkInt($id)) {
+
+                /**
+                 * Elimino l'utente con l'id corrispondente
+                 */
+                db_manager::execute(
+                    "DELETE from users where id = " . $id
+                );
+
+                /**
+                 * Elimino tutte le notifiche del utente.
+                 */
+                db_manager::execute(
+                    "DELETE from alerts where user_id = " . $id
+                );
+            }
+
+            /**
+             * Ritorno alla pagina degli utenti
+             */
+            $this->home();
+        }
     }
 }
