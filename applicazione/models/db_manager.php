@@ -30,5 +30,4 @@ class db_manager
         $alerts = db_manager::executeQuery("SELECT * FROM alerts where level <=".$results[0]['access']);
         return $alerts;
     }
-
 }
