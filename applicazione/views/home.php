@@ -1,5 +1,6 @@
 <?php
     require_once ('controllers/login.php');
+    require_once ('models/validate.php');
     $login = new login();
     if(!isset($first)){
         $first = false;
@@ -8,7 +9,7 @@
     if($first){
         $invalid = false;
     }else{
-        if($login->check()){
+        if(validate::check()){
             $invalid = false;
         }
     }
@@ -20,6 +21,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="shortcut icon" href="<?php echo URL?>/images/logo.png">
     <title>CPT backup manager - Home</title>
     <link type="text/css" href="<?php echo URL?>/libraries/fontawesome-free-5.10.2-web/css/all.css" rel="stylesheet">
     <script src="<?php echo URL?>/libraries/jquery-3.4.1.min.js"></script>
@@ -191,7 +193,7 @@
         }
 
         .dashboard tr:nth-child(even){
-            background-color: #eee;
+            background-color: rgba(0,200,255,0.1);
         }
 
         .dashboard td{
@@ -279,7 +281,7 @@
             <?php
                 foreach ($alerts as $alert) {
                     if ($alert['level'] == 2) {
-                        if ($login->admin()) {
+                        if (validate::admin()) {
                             echo "<a href='".URL."users/home'><li>".$alert['content']."</li></a>";
                         }
                     } else {
@@ -295,9 +297,10 @@
 <div class="row navbar">
     <div class="bar">
         <ul>
+            <li><img src="<?php echo URL?>/images/logo.png" alt="logo" width="50" height="50"/></li>
             <li><a class="active"><span>Home</span></a></li>
             <li><a href="<?php echo URL?>backup/home"><span>Backups</span></a></li>
-            <?php if($login->admin()): ?><li><a href="<?php echo URL?>users/home"><span>Utenti</span></a></li><?php endif; ?>
+            <?php if(validate::admin() || isset($admin)): ?><li><a href="<?php echo URL?>users/home"><span>Utenti</span></a></li><?php endif; ?>
         </ul>
     </div>
     <div class="profile">
@@ -324,34 +327,33 @@
                     PROSSIMO BACKUP
                 </th>
             </tr>
+            <?php foreach ($backups as $backup): ?>
             <tr>
                 <td class="success">
-                    Backup sito supsi
+                    <?php foreach ($databases as $database){
+                        if($database['id'] == $backup['db_id']){
+                            echo $database['name'];
+                        }
+					}?>
                 </td>
                 <td>
-                    10.09.2019
+                    <?php echo date('d.m.Y H:i', strtotime($backup['creation_date'])); ?>
                 </td>
                 <td>
-                    Eseguito con successo
+                    <?php if($backup['status'] == 0){
+                        echo "In corso";
+                    }elseif ($backup['status'] == 1){
+                        echo "Completato con successo";
+                    }else{
+                        echo "Errore nell'esecuzione";
+                    }
+                    ?>
                 </td>
                 <td>
-                    15.09.2019
+                    <?php echo date('d.m.Y H:i', strtotime($backup['creation_date']. ' + 7 days')); ?>
                 </td>
             </tr>
-            <tr>
-                <td class="error">
-                    Backup sito CPT
-                </td>
-                <td>
-                    12.09.2019
-                </td>
-                <td>
-                    Errore nell'esecuzione
-                </td>
-                <td>
-                    13.09.2019
-                </td>
-            </tr>
+            <?php endforeach; ?>
         </table>
     </div>
 </div>

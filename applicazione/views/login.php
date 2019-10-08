@@ -2,6 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <link rel="shortcut icon" href="<?php echo URL?>/images/logo.png">
     <title>CPT backup manager - Login</title>
     <script src="<?php echo URL?>/libraries/jquery-3.4.1.min.js"></script>
     <style>
@@ -251,7 +252,7 @@
 <body>
 <div class="cover" id="creationTab">
     <div id="closeButton"> X </div>
-    <form method="post" action="<?php echo URL?>users/addUser" class="creationForm" id="creationForm">
+    <form method="post" action="<?php echo URL?>login/addUser" class="creationForm" id="creationForm">
         <div class="row spacing-top-lg spacing-left-xl col-8">
             <h2 class="title" style="text-align: left">RICHIEDI ACCOUNT</h2>
             <input class="spacing-top-sm" type="text" placeholder="Nome" name="name">

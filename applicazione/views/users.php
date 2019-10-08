@@ -1,7 +1,6 @@
 <?php
-require_once('controllers/login.php');
-$login = new login();
-if (!$login->check()) {
+require_once('models/validate.php');
+if (!validate::check()) {
     require("login.php");
 } else {
     ?>
@@ -9,6 +8,7 @@ if (!$login->check()) {
     <html lang="en">
     <head>
         <meta charset="UTF-8">
+        <link rel="shortcut icon" href="<?php echo URL?>/images/logo.png">
         <title>CPT backup manager - Backups</title>
         <link type="text/css" href="<?php echo URL ?>/libraries/fontawesome-free-5.10.2-web/css/all.css"
               rel="stylesheet">
@@ -251,7 +251,7 @@ if (!$login->check()) {
 
             .dashboard tr:nth-child(even) {
                 min-width: 10vw;
-                background-color: #eee;
+                background-color: rgba(0,200,255, 0.1);
             }
 
             .dashboard td {
@@ -334,7 +334,7 @@ if (!$login->check()) {
                     <?php
                     foreach ($alerts as $alert) {
                         if ($alert['level'] == 2) {
-                            if ($login->admin()) {
+                            if (validate::admin()) {
                                 echo "<a href='" . URL . "users/home'><li>" . $alert['content'] . "</li></a>";
                             }
                         } else {
@@ -350,6 +350,7 @@ if (!$login->check()) {
     <div class="row navbar">
         <div class="bar">
             <ul>
+                <li><img src="<?php echo URL?>/images/logo.png" alt="logo" width="50" height="50"/></li>
                 <li><a href="<?php echo URL . 'login/index' ?>"><span>Home</span></a></li>
                 <li><a href="<?php echo URL . 'backup/home' ?>"><span>Backups</span></a></li>
                 <li><a class="active"><span>Utenti</span></a></li>

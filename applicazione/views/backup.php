@@ -1,8 +1,9 @@
 
 <?php
 require_once ('controllers/login.php');
+require_once ('models/validate.php');
 $login = new login();
-if(!$login->check()){
+if(!validate::check()){
     $login->index();
 }else{
 ?>
@@ -10,6 +11,7 @@ if(!$login->check()){
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="shortcut icon" href="<?php echo URL?>/images/logo.png">
     <title>CPT backup manager - Backups</title>
     <link type="text/css" href="<?php echo URL?>/libraries/fontawesome-free-5.10.2-web/css/all.css" rel="stylesheet">
     <script src="<?php echo URL?>/libraries/jquery-3.4.1.min.js"></script>
@@ -254,7 +256,7 @@ if(!$login->check()){
         }
 
         .dashboard tr:nth-child(even) {
-            background-color: #eee;
+            background-color: rgba(0,200,255,0.1);
         }
 
         .dashboard td {
@@ -298,7 +300,7 @@ if(!$login->check()){
                 <?php
                 foreach ($alerts as $alert) {
                     if ($alert['level'] == 2) {
-                        if ($login->admin()) {
+                        if (validate::admin()) {
                             echo "<a href='".URL."users/home'><li>".$alert['content']."</li></a>";
                         }
                     } else {
@@ -314,9 +316,10 @@ if(!$login->check()){
 <div class="row navbar">
     <div class="bar">
         <ul>
+            <li><img src="<?php echo URL?>/images/logo.png" alt="logo" width="50" height="50"/></li>
             <li><a href="<?php echo URL?>login/index"><span>Home</span></a></li>
             <li><a class="active"><span>Backups</span></a></li>
-            <?php if($login->admin()): ?><li><a href="<?php echo URL?>users/home"><span>Utenti</span></a></li><?php endif; ?>
+            <?php if(validate::admin()): ?><li><a href="<?php echo URL?>users/home"><span>Utenti</span></a></li><?php endif; ?>
         </ul>
     </div>
     <div class="profile">
@@ -341,18 +344,27 @@ if(!$login->check()){
                 AZIONI
             </th>
         </tr>
+        <?php foreach ($databases as $database): ?>
         <tr>
             <td>
-                Backup sito SUPSI
+                <?php echo $database['name']; ?>
             </td>
             <td>
-                Full backup ogni martedi alle 23.59, Incrementale tutti i giorni alle 9.00.
+                <?php
+				$days = array("Lunedi","Martedi","Mercoledi","Giovedi","Venerdi","Sabato","Domenica");
+                foreach ($settings as $setting){
+                    if($setting['id'] = $database['settings_id']){
+				    echo "Full backup ogni ".$days[$setting['day']]." alle ".$setting['hour'].".00";
+                    }
+                }
+                ?>
             </td>
             <td>
                 <center><span><i class="fa fa-play"> </i></span><span><i class="far fa-file-alt"> </i></span>
-                    <?php if($login->admin()):?><span><i class="fas fa-pencil-alt"> </i></span><span><i class="fas fa-times"> </i></span><?php endif; ?></center>
+                    <?php if(validate::admin()):?><span><i class="fas fa-pencil-alt"> </i></span><span><i class="fas fa-times"> </i></span><?php endif; ?></center>
             </td>
         </tr>
+        <?php endforeach; ?>
     </table>
 </div>
 </body>
