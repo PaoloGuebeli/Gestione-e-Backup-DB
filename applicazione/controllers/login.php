@@ -159,12 +159,12 @@ class login
 					/**
 					 * Ritorno un messaggio di conferma di creazione e ritorno alla pagina di login
 					 */
-					$msg = "First line of text\nSecond line of text";
+					/*$msg = "First line of text\nSecond line of text";
 
 					$msg = wordwrap($msg, 70);
 					mail($_POST['email'], "Account creates", $msg);
 					$_POST['creationError'] = 'L\'account è stato creato, verrà verificato nei prossimi giorni';
-					require('views/login.php');
+					require('views/login.php');*/
 				} else {
 
 					/**

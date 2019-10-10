@@ -281,7 +281,7 @@
             <?php
                 foreach ($alerts as $alert) {
                     if ($alert['level'] == 2) {
-                        if (validate::admin()) {
+                        if (validate::admin() || isset($admin)) {
                             echo "<a href='".URL."users/home'><li>".$alert['content']."</li></a>";
                         }
                     } else {
