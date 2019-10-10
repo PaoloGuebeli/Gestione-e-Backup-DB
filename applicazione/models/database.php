@@ -25,4 +25,9 @@ class database
 			return $conn;
 		}
 	}
+
+	public static function dump($host, $user, $pass, $db, $dir){
+		exec("mysqldump --column-statistics=0 --user={$user} --password={$pass} --host={$host} {$db} --result-file={$dir} 2>&1", $output);
+		return $output;
+	}
 }

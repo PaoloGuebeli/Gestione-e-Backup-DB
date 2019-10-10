@@ -183,6 +183,11 @@ if(!validate::check()){
             background-color: #afc !important;
         }
 
+        a {
+            color: black;
+            text-decoration: none;
+        }
+
         #war {
             width: 25vw;
             z-index: 10;
@@ -360,7 +365,7 @@ if(!validate::check()){
                 ?>
             </td>
             <td>
-                <center><span><i class="fa fa-play"> </i></span><span><i class="far fa-file-alt"> </i></span>
+                <center><a href="<?php echo URL. "backup/startBackup/" . $database['id'] ?>"><span><i class="fa fa-play"> </i></span></a><span><i class="far fa-file-alt"> </i></span>
                     <?php if(validate::admin()):?><span><i class="fas fa-pencil-alt"> </i></span><span><i class="fas fa-times"> </i></span><?php endif; ?></center>
             </td>
         </tr>
