@@ -301,7 +301,7 @@
     {
         var container = $('#creationTab');
 
-        // if the target of the click isn't the container nor a descendant of the container
+        // Se il target non è il contenitore o un sotto contenitore lo chiude.
         if (!$('#creationForm').is(e.target) && $('#creationForm').has(e.target).length === 0 && !$('#new').is(e.target))
         {
             container.hide();
