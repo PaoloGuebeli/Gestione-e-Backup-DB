@@ -244,6 +244,11 @@
             border-left: 5px solid #6ce;
         }
 
+        .dashboard span {
+            padding: 10%;
+            cursor: pointer;
+        }
+
         .ta-center{
             text-align: center;
         }
@@ -264,6 +269,15 @@
             color: rgba(255,0,0,0.8);
         }
         <?php } ?>
+
+        span:hover .fa-file-alt {
+            color: blue;
+        }
+
+        span:hover .fa-times {
+            color: red;
+        }
+
 
         a{
             color: black;
@@ -305,7 +319,6 @@
     </div>
     <div class="profile">
         <ul>
-            <li><a><span><i class="fas fa-user"></i></span></a></li>
             <li><a id="bell"><span><i class="fas fa-bell"></i></span></a></li>
             <li><a href="<?php echo URL.'login/logout' ?>"><span><i class="fas fa-sign-out-alt"></i></span></a></li>
         </ul>
@@ -315,46 +328,53 @@
 
 <div class="row">
     <div class="dashboard  spacing-top-md spacing-left-md">
+		<?php if(isset($backups)){ ?>
         <table cellspacing="0">
             <tr>
                 <th>
                     NOME
                 </th>
-                <th colspan="2">
+                <th>
                     ULTIMO BACKUP
                 </th>
                 <th>
                     PROSSIMO BACKUP
                 </th>
+                <th>
+                    AZIONI
+                </th>
             </tr>
-            <?php foreach ($backups as $backup): ?>
-            <tr>
-                <td class="success">
-                    <?php foreach ($databases as $database){
-                        if($database['id'] == $backup['db_id']){
-                            echo $database['name'];
-                        }
-					}?>
-                </td>
-                <td>
-                    <?php echo date('d.m.Y H:i', strtotime($backup['creation_date'])); ?>
-                </td>
-                <td>
-                    <?php if($backup['status'] == 0){
-                        echo "In corso";
-                    }elseif ($backup['status'] == 1){
-                        echo "Completato con successo";
-                    }else{
-                        echo "Errore nell'esecuzione";
-                    }
-                    ?>
-                </td>
-                <td>
-                    <?php echo date('d.m.Y H:i', strtotime($backup['creation_date']. ' + 7 days')); ?>
-                </td>
-            </tr>
-            <?php endforeach; ?>
+
+                <?php foreach ($backups as $backup): ?>
+                    <tr>
+                        <td class="success">
+							<?php foreach ($databases as $database){
+								if($database['id'] == $backup['db_id']){
+									echo $database['name'];
+								}
+							}?>
+                        </td>
+                        <td>
+							<?php if($backup['status'] == 0){
+								echo "In corso";
+							}elseif ($backup['status'] == 1){
+								echo "Completato con successo il ".date('d.m.Y H:i', strtotime($backup['creation_date']));
+							}else{
+								echo "Errore nell'esecuzione il ".date('d.m.Y H:i', strtotime($backup['creation_date']));
+							}
+							?>
+                        </td>
+                        <td>
+							<?php echo date('d.m.Y H:i', strtotime($backup['creation_date']. ' + 7 days')); ?>
+                        </td>
+                        <td>
+                            <center><span><i class="far fa-file-alt"> </i></span>
+								<?php if(validate::admin()):?><a href="<?php echo URL."login/hide/".$backup['id'] ?>"><span><i class="fas fa-times"> </i></span></a><?php endif; ?></center>
+                        </td>
+                    </tr>
+				<?php endforeach; ?>
         </table>
+        <?php } ?>
     </div>
 </div>
 </body>
