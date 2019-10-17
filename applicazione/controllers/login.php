@@ -60,6 +60,7 @@ class login
 
 					$backups = $this->getBackups();
 					$databases = $this->getDatabases();
+					$settings = $this->getSettings();
 					require 'views/home.php';
 
 				} else {
@@ -163,8 +164,8 @@ class login
 
 					$msg = wordwrap($msg, 70);
 					mail($_POST['email'], "Account creates", $msg);
-					$_POST['creationError'] = 'L\'account è stato creato, verrà verificato nei prossimi giorni';
-					require('views/login.php');*/
+					$_POST['creationError'] = 'L\'account è stato creato, verrà verificato nei prossimi giorni';*/
+					require('views/login.php');
 				} else {
 
 					/**
@@ -190,10 +191,48 @@ class login
 	}
 
 	private function getBackups(){
-		return db_manager::executeQuery('SELECT * from backup');
+		return db_manager::executeQuery('SELECT * from backup where display = 1');
 	}
 
 	private function getDatabases(){
-		return db_manager::executeQuery('SELECT id, name from database_data');
+		return db_manager::executeQuery('SELECT id, name, settings_id from database_data');
+	}
+
+	private function getSettings()
+	{
+		return db_manager::executeQuery('SELECT * from settings');
+	}
+
+	/**
+	 * Questo metodo permette di eliminare un alert di backup.
+	 * @param $id
+	 */
+	public function hide($id)
+	{
+
+		/**
+		 * Controllo l'id prima di eliminarlo
+		 */
+		if (validate::checkInt($id)) {
+
+			/**
+			 * Elimino il "backup" con l'id corrispondente
+			 */
+			db_manager::execute(
+				"UPDATE backup SET display = 0 where id = " . $id
+			);
+
+			/**
+			 * Elimino tutte le notifiche del utente.
+			 */
+			db_manager::execute(
+				"DELETE from alerts where backup_id = " . $id
+			);
+		}
+
+		/**
+		 * Ritorno alla pagina degli utenti
+		 */
+		$this->index();
 	}
 }
