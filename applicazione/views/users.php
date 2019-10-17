@@ -149,6 +149,20 @@ if (!validate::check()) {
                 float: left;
             }
 
+            select{
+                border: 2px solid lightgray;
+                background-color: #eee;
+                padding: 8px;
+                border-radius:8px;
+                outline: none;
+            }
+            
+            select:hover{
+                border-bottom-right-radius: 0;
+                border-bottom-left-radius: 0;
+            }
+
+
             div.navbar ul li a {
                 display: block;
                 color: #666;
@@ -358,7 +372,6 @@ if (!validate::check()) {
         </div>
         <div class="profile">
             <ul>
-                <li><a><span><i class="fas fa-user"></i></span></a></li>
                 <li><a id="bell"><span><i class="fas fa-bell"></i></span></a></li>
                 <li><a href="<?php echo URL . 'login/logout' ?>"><span><i class="fas fa-sign-out-alt"></i></span></a>
                 </li>
@@ -414,7 +427,7 @@ if (!validate::check()) {
                 <tr class="hide" id="<?php echo "um" . $user['id'] ?>">
                     <form action="<?php echo URL."users/modify/".$user['id'] ?>" method="post">
                         <td><input type="text" placeholder="<?php echo $user['name'] ?>" style="width: 40%" name="mName">
-                            <input class="spacing-left-sm" type="text" placeholder="<?php echo $user['lastname'] ?>"
+                            <input class="spacing-left-sm spacing-top-sm" type="text" placeholder="<?php echo $user['lastname'] ?>"
                                    style="width: 40%" name="mLastname"></td>
                         <td><input type="text" placeholder="<?php echo $user['email'] ?>" style="width: 80%" name="mEmail"></td>
                         <td>
